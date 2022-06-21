@@ -8,7 +8,6 @@ namespace Shared
 {
     public class CreateExcelMessage
     {
-        public string UerId { get; set; }
         public int FileId { get; set; }
         public List<Product> Products { get; set; }
 
