@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace RabbitMQWeb.ExcelCreate.Controllers
 {
-    //[Authorize]
+    [Authorize]
     public class ProductController : Controller
     {
         private readonly AppDbContext _context;
