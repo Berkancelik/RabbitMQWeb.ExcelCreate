@@ -3,25 +3,50 @@
 }
 @model List<UserFile>
 
-<h1>Files</h1>
+@section Scripts
+    {
+    <script>
+        $(document).ready(function() {
 
-<table class="table table-striped">
-    <thead>
-        <tr>
-            <th>File Name</th>
-            <th>Created Date</th>
-            <th>File Status</th>
-        </tr>
-    </thead>
-    @foreach (var item in Model)
+            var hasStartCreatingExcel = '@TempData["StartCreatingExcel"]';
+
+            if (hasStartCreatingExcel) {
+
+                Swal.fire({
+                    position: 'top-end',
+                    icon: 'success',
+                    title: 'Excel oluşturma işlemi başlamıştır. Bittiğinde bildiri alacaksınız.',
+                    showConfirmButton: false,
+                    timer: 2500
+
+                })
+            }
+        })
+
+    </script>
+}
+    <h1>Files</h1>
+    <table class=" table table-striped">
+        <thead>
+            <tr>
+                <th>File Name</th>
+                <th>Created Date</th>
+                <th>File Status</th>
+                <th>Download</th>
+            </tr>
+        </thead>
+        @foreach (var item in Model)
     {
         <tr>
             <td>@item.FileName</td>
             <td>@item.GetCreatedDate</td>
             <td>@item.FileStatus</td>
             <td>
-                <a href="~/files/@item.FilePath" class="btn btn-primary @(item.FileStatus== FileStatus.Creating ? "disable": "")">Download</a>
+
+                <a href="~/files/@item.FilePath" class="btn btn-primary @(item.FileStatus==FileStatus.Creating ? "disabled": "")">Download</a>
+
             </td>
+
         </tr>
     }
 </table>

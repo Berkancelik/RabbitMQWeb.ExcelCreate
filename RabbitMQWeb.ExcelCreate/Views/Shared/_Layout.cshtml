@@ -3,7 +3,7 @@
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>@ViewData["Title"] - RabbitMQWeb.ExcelCreate</title>
+    <title>@ViewData["Title"] - UdemRabbitMQWeb.ExcelCreate</title>
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="~/css/site.css" />
 </head>
@@ -11,7 +11,7 @@
     <header>
         <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
             <div class="container">
-                <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">RabbitMQWeb.ExcelCreate</a>
+                <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">UdemRabbitMQWeb.ExcelCreate</a>
                 <button class="navbar-toggler" type="button" data-toggle="collapse" data-target=".navbar-collapse" aria-controls="navbarSupportedContent"
                         aria-expanded="false" aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"></span>
@@ -31,14 +31,19 @@
                         <li class="nav-item">
                             <a class="nav-link text-dark" asp-area="" asp-controller="Product" asp-action="Files">Files</a>
                         </li>
+
                         @if (!Context.User.Identity.IsAuthenticated)
                         {
-                            <li class="nav-item"><a class="nav-link text-dark" asp-controller="Account" asp-action="Login">Login</a></li>
+                            <li class="nav-item">
+                                <a class="nav-link text-dark" asp-area="" asp-controller="Account" asp-action="Login">Log in</a>
+                            </li>
                         }
+
                     </ul>
-                    @if (!Context.User.Identity.IsAuthenticated)
+
+                    @if (Context.User.Identity.IsAuthenticated)
                     {
-                        <span>User Name: @Context.User.Identity.Name</span>
+                        <span>User Name : @Context.User.Identity.Name</span>
                     }
                 </div>
             </div>
@@ -52,12 +57,62 @@
 
     <footer class="border-top footer text-muted">
         <div class="container">
-            &copy; 2022 - RabbitMQWeb.ExcelCreate - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+            &copy; 2021 - UdemRabbitMQWeb.ExcelCreate - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
         </div>
     </footer>
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>
+    <script src="//cdn.jsdelivr.net/npm/sweetalert2@10"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/aspnet-signalr/1.0.27/signalr.min.js" integrity="sha512-a+73ErrZPjhqOu0qbW1QLsenEF4pvDjmnd+Ws6hkDyJlrwAigOQAxQhIT+fPNFWScUvtJQvn+G535TT2C6/G4g==" crossorigin="anonymous"></script>
+    <script>
+        $(document).ready(function () {
+
+            var connection = new signalR.HubConnectionBuilder().withUrl("/MyHub").build();
+
+            start();
+            function start() {
+
+                connection.start().then().catch((err) => {
+
+                    console.log(err);
+                    setTimeout(() => start(), 2000);
+                })
+
+
+            }
+
+            connection.on("CompletedFile", () => {
+
+
+                console.log("excel oluşturma bitti");
+
+                Swal.fire({
+                    position: 'top-end',
+                    icon: 'success',
+                    title: 'Excel dosyanız hazır',
+                    showConfirmButton: true,
+                    confirmButtonText:"Dosyalarım"
+                    
+                }).then((result) => {
+                    if (result.isConfirmed) {
+
+                        window.location = "/product/files";
+                    }
+
+                })
+
+            });
+
+
+
+
+        })
+
+    </script>
+
+
+
     @await RenderSectionAsync("Scripts", required: false)
 </body>
 </html>

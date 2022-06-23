@@ -33,6 +33,8 @@ namespace RabbitMQWeb.ExcelCreate.Controllers
         {
             var user = await _usermManager.FindByNameAsync(User.Identity.Name);
 
+
+
             var fileName = $"product-excel-{Guid.NewGuid().ToString().Substring(1, 10)}";
 
             UserFile userFile = new()
