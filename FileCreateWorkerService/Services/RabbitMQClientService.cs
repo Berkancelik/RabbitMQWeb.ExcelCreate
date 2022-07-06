@@ -28,7 +28,6 @@ namespace FileCreateWorkerService.Services
         {
             _connection = _connectionFactory.CreateConnection();
 
-
             if (_channel is { IsOpen: true })
             {
                 return _channel;
@@ -47,10 +46,8 @@ namespace FileCreateWorkerService.Services
         {
             _channel?.Close();
             _channel?.Dispose();
-
             _connection?.Close();
             _connection?.Dispose();
-
             _logger.LogInformation("RabbitMQ ile bağlantı koptu...");
 
         }

@@ -37,12 +37,9 @@ namespace UdemRabbitMQWeb.ExcelCreate.Controllers
 
             var path = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/files", filePath);
 
-
-
             using FileStream stream = new(path, FileMode.Create);
 
             await file.CopyToAsync(stream);
-
 
             userFile.CreatedDate = DateTime.Now;
             userFile.FilePath = filePath;
@@ -51,8 +48,6 @@ namespace UdemRabbitMQWeb.ExcelCreate.Controllers
             await _context.SaveChangesAsync();
             //SignalR notification oluşturulacak
             await _hubContext.Clients.User(userFile.UserId).SendAsync("CompletedFile");
-
-
 
             return Ok();
         }

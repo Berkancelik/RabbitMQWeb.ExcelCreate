@@ -33,8 +33,6 @@ namespace RabbitMQWeb.ExcelCreate.Controllers
         {
             var user = await _usermManager.FindByNameAsync(User.Identity.Name);
 
-
-
             var fileName = $"product-excel-{Guid.NewGuid().ToString().Substring(1, 10)}";
 
             UserFile userFile = new()
@@ -43,12 +41,10 @@ namespace RabbitMQWeb.ExcelCreate.Controllers
                 FileName = fileName,
                 FileStatus = FileStatus.Creating
             };
-
             await _context.UserFiles.AddAsync(userFile);
             await _context.SaveChangesAsync();
             _rabbitMQPublisher.Publish(new Shared.CreateExcelMessage() { FileId = userFile.Id});
             TempData["StartCreatingExcel"] = true;
-
             return RedirectToAction(nameof(Files));
         }
         public async Task<IActionResult> Files()
